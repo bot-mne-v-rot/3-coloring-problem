@@ -26,7 +26,7 @@
   (depends 
     (dune (>= 2.0))
     (ocaml (and (>= 4.13.0) (< 4.14.0)))
-    (ocamlformat :with-test)
+    (ocamlformat (and :with-test (= 0.22.4)))
     js_of_ocaml
     js_of_ocaml-compiler
     js_of_ocaml-lwt

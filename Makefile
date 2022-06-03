@@ -16,4 +16,13 @@ build: _opam
 	eval $$(opam env) && \
 	dune build
 
+fmt:
+	eval $$(opam env) && \
+	dune build @fmt --auto-promote
+
+lint:
+	eval $$(opam env) && \
+	dune build @fmt
+	opam lint .
+
 .PHONY: all clean

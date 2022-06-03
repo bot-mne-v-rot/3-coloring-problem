@@ -1,4 +1,4 @@
 (coq.theory
- (name tree_spec)
- (theories tree)
+ (name Theories)
+ (theories Src)
  (flags -impredicative-set))

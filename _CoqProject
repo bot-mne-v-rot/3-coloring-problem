@@ -2,8 +2,8 @@
 # to see interface files
 
 -arg -impredicative-set
--R _build/default/lib tree
--R _build/default/theories TreeSpec
+-R _build/default/src Src
+-R _build/default/theories Theories
 
-_build/default/lib/Tree.v
+_build/default/src/Tree.v
 _build/default/theories/TreeSpec.v

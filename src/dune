@@ -2,8 +2,7 @@
  (name reduction)
  (modes byte native)
  (wrapped true)
- (libraries
-  base)
+ (libraries base)
  (preprocess
   (pps ppx_let ppx_compare ppx_sexp_conv ppx_string_interpolation sedlex.ppx)))
 
@@ -11,9 +10,9 @@
  (targets Tree.v)
  (deps Tree.ml)
  (mode promote)
- (action  (run %{bin:coq-of-ocaml} %{deps})))
+ (action
+  (run %{bin:coq-of-ocaml} %{deps})))
 
 (coq.theory
- (name tree)
+ (name Src)
  (flags -impredicative-set))
-
