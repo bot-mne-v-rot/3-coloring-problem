@@ -1,1 +1,1 @@
-# 3-colour-problem
+# 3-coloring-problem

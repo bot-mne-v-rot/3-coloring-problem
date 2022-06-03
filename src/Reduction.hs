@@ -7,7 +7,7 @@ module Reduction (
     Vertexes,
     Edges,
     Graph,
-    
+
     Color,
     Coloring,
     Solution,
@@ -38,7 +38,7 @@ newtype Solution = Solution [Int]
 type Solver = CNF -> Maybe Solution
 
 solve :: Solver -> Graph -> Coloring
-solve solver graph = recoverAnswer (size graph) $ solver $ generateCNF' $ graph
+solve solver graph = recoverAnswer (size graph) $ solver $ generateCNF' graph
 
 recoverAnswer :: Int -> Maybe Solution -> Coloring
 recoverAnswer _ Nothing = []
@@ -46,7 +46,7 @@ recoverAnswer _ (Just (Solution [])) = []
 recoverAnswer n (Just (Solution xs)) = helper n xs []
     where helper n [] res = res
           helper n (x:xs) res | x < 0 = helper n xs res
-                              | otherwise = helper n xs ((colorByLiteral n x) : res)
+                              | otherwise = helper n xs (colorByLiteral n x : res)
 
 colorByLiteral :: Int -> Int -> Color
 colorByLiteral n lit = toEnum $ snd $ fromSingleToPair n lit
@@ -62,7 +62,7 @@ generateCNF n edges = vertexHasColor n ++ vertexesColorBound n ++ edgesHasDiffCo
 
 {- Clauses for condition: each vertex has at least one color -}
 vertexHasColor :: Int -> CNF
-vertexHasColor n = do 
+vertexHasColor n = do
     vertex <- [0..(n - 1)]
     let clause = [ fromPairToSingle n (vertex, color) | color <- [0..2] ]
     return clause
@@ -92,7 +92,7 @@ edgesHasDiffColors n edges = do
     e <- getPossibleEdges n
     f <- getPossibleColors (fst e)
     s <- getPossibleColors (snd e)
-    if (snd f == snd s)
+    if snd f == snd s
         then do
             let flit = fromPairToSingle n f
             let slit = fromPairToSingle n s
@@ -100,12 +100,12 @@ edgesHasDiffColors n edges = do
                 then return [-flit, -slit] -- by De Morgans Law
                 else []
         else []
-        
+
 getPossibleEdges :: Int -> Edges
-getPossibleEdges n = do 
+getPossibleEdges n = do
                     i <- [0..(n - 1)]
-                    j <- [0..(n - 1)] 
-                    if (i /= j) then return (i, j)
+                    j <- [0..(n - 1)]
+                    if i /= j then return (i, j)
                     else []
 
 fromPairToSingle :: Int -> (Int, Int) -> Int
