@@ -36,9 +36,9 @@ jobs:
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
 
-      - run: opam pin add mtt.dev . --no-action
+      - run: opam pin add three_coloring_problem.dev . --no-action
 
-      - run: opam depext mtt --yes
+      - run: opam depext three_coloring_problem --yes
 
       - run: opam install . --deps-only --with-doc --with-test
 
