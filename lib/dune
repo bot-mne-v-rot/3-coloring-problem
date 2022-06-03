@@ -1,0 +1,2 @@
+(library
+ (name three_coloring_problem))
