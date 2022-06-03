@@ -1,0 +1,18 @@
+_opam/
+.stack-work/
+.ghc-tmp/
+
+# Coq
+*.vo
+*.vos
+*.vok
+*.glob
+.*.aux
+*.v.d
+.coqdeps.d
+Makefile.coq.conf
+Makefile.bak
+Makefile.conf
+.lia.cache
+
+Makefile.coq

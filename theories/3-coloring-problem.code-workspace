@@ -1,0 +1,10 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"coqtop.binPath": "/Users/smntin/work/haskell/3-coloring-problem/_opam/bin"
+	}
+}

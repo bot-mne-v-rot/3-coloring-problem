@@ -16,32 +16,41 @@ module Reduction (
     recoverAnswer,
     solve
 ) where
-    
-import Control.Monad
-import Control.Applicative
-
-type Edges v = [(v, v)]
-data Graph v = Graph { getVertices :: [v], getEdges :: Edges v }
-
-data Var v = Var v Color
-    deriving (Show, Eq)
-
-data Literal v  = Lit (Var v) | NLit (Var v)
-type Clause v   = [Literal v]
-type CNF v      = [Clause v]
-type Solution v = [(Var v, Bool)]
 
 data Color = R | G | B
-    deriving (Show, Enum, Eq)
+    deriving (Enum, Eq)
 
+type Vertex = Int
 type Coloring = [Color]
+type Edges = [(Vertex, Vertex)]
+data Graph = Graph { getVertices :: [Vertex], getEdges :: Edges }
 
-type SatSolver v = CNF v -> Maybe (Solution v)
+data Var = Var Vertex Color
+    deriving Eq
 
-solve :: Eq v => SatSolver v -> Graph v -> Maybe Coloring
+data Literal  = Lit Var | NLit Var
+type Clause   = [Literal]
+type CNF      = [Clause]
+type Solution = [(Var, Bool)]
+
+type SatSolver = CNF -> Maybe Solution
+
+solve :: SatSolver -> Graph -> Maybe Coloring
 solve solver graph = recoverAnswer graph $ solver $ generateCNF graph
 
-recoverAnswer :: Eq v => Graph v -> Maybe (Solution v) -> Maybe Coloring
+-- Redefining them because hs-to-coq failes to translate them
+infixl 3 <|>
+(<|>) :: Maybe a -> Maybe a -> Maybe a
+Just x <|> _      = Just x
+_      <|> Just x = Just x
+_      <|> _      = Nothing 
+
+guard :: Bool -> Maybe ()
+guard True  = Just ()
+guard False = Nothing 
+
+
+recoverAnswer :: Graph -> Maybe Solution -> Maybe Coloring
 recoverAnswer _ Nothing = Nothing
 recoverAnswer graph (Just xs) =
     mapM f (getVertices graph)
@@ -52,27 +61,27 @@ recoverAnswer graph (Just xs) =
                 return c
             col R <|> col G <|> col B
 
-generateCNF :: Graph v -> CNF v
+generateCNF :: Graph -> CNF
 generateCNF g =
     vertexHasColor g ++
     verticesColorUniqueness g ++
     adjVerticesHaveDiffColors g
 
 {- Clauses for condition: each vertex has at least one color -}
-vertexHasColor :: Graph v -> CNF v
+vertexHasColor :: Graph -> CNF
 vertexHasColor g = do
     v <- getVertices g
     return [ Lit $ Var v c | c <- [R, G, B] ]
 
 {- Clauses for condition: no more than one color is assigned to each vertex -}
-verticesColorUniqueness :: Graph v -> CNF v
+verticesColorUniqueness :: Graph -> CNF
 verticesColorUniqueness g = do
     v <- getVertices g
     let diffCols c1 c2 = [ NLit $ Var v c1, NLit $ Var v c2 ]
     [ diffCols R B, diffCols B G, diffCols R G ]
 
 {- Clauses for condition: adjacent vertices have different colors -}
-adjVerticesHaveDiffColors :: Graph v -> CNF v
+adjVerticesHaveDiffColors :: Graph -> CNF
 adjVerticesHaveDiffColors g = do
     (u, v) <- getEdges g
     [ [ NLit $ Var u c, NLit $ Var v c ] | c <- [R, G, B] ]

@@ -1,0 +1,2 @@
+rename value Reduction.Var = Reduction.MkVar
+rename value Reduction.Graph = Reduction.MkGraph

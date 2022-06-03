@@ -1,0 +1,6 @@
+-R hs-to-coq/base ""
+-Q hs-to-coq/base-thy Proofs
+-Q src-coq Src
+-Q theories Proving
+src-coq/Reduction.v
+theories/ReductionSpec.v

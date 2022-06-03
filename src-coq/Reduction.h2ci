@@ -1,0 +1,26 @@
+constructors:
+  Reduction.Literal: ! '[Qualified "Reduction" "Lit",Qualified "Reduction" "NLit"]'
+  Reduction.Var: ! '[Qualified "Reduction" "MkVar"]'
+  Reduction.Color: ! '[Qualified "Reduction" "R",Qualified "Reduction" "G",Qualified
+    "Reduction" "B"]'
+  Reduction.Graph: ! '[Qualified "Reduction" "MkGraph"]'
+constructorFields:
+  Reduction.MkVar: NonRecordFields 2
+  Reduction.MkGraph: RecordFields [Qualified "Reduction" "getVertices",Qualified "Reduction"
+    "getEdges"]
+  Reduction.B: NonRecordFields 0
+  Reduction.R: NonRecordFields 0
+  Reduction.NLit: NonRecordFields 1
+  Reduction.G: NonRecordFields 0
+  Reduction.Lit: NonRecordFields 1
+recordFieldTypes:
+  Reduction.getEdges: Qualified "Reduction" "Graph"
+  Reduction.getVertices: Qualified "Reduction" "Graph"
+constructorTypes:
+  Reduction.MkVar: Qualified "Reduction" "Var"
+  Reduction.MkGraph: Qualified "Reduction" "Graph"
+  Reduction.B: Qualified "Reduction" "Color"
+  Reduction.R: Qualified "Reduction" "Color"
+  Reduction.NLit: Qualified "Reduction" "Literal"
+  Reduction.G: Qualified "Reduction" "Color"
+  Reduction.Lit: Qualified "Reduction" "Literal"
