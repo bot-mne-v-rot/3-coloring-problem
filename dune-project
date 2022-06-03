@@ -1,5 +1,7 @@
 (lang dune 3.1)
 
+(using coq 0.3)
+
 (name three_coloring_problem)
 
 (generate_opam_files true)
@@ -14,6 +16,8 @@
 (license LICENSE)
 
 (documentation https://github.com/bot-mne-v-rot/3-coloring-problem/)
+
+(implicit_transitive_deps true)
 
 (package
   (name three_coloring_problem)

@@ -1,4 +1,4 @@
 (executable
  (public_name three_coloring_problem)
  (name main)
- (libraries three_coloring_problem))
+ (libraries reduction))

@@ -1,0 +1,9 @@
+# Paths should be prefixed with _build/default 
+# to see interface files
+
+-arg -impredicative-set
+-R _build/default/lib tree
+-R _build/default/theories TreeSpec
+
+_build/default/lib/Tree.v
+_build/default/theories/TreeSpec.v
