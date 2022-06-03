@@ -12,7 +12,7 @@ bug-reports: "https://github.com/bot-mne-v-rot/3-coloring-problem/issues"
 depends: [
   "dune" {>= "3.1" & >= "2.0"}
   "ocaml" {>= "4.13.0" & < "4.14.0"}
-  "ocamlformat" {with-test & = "0.21.0"}
+  "ocamlformat" {with-test & = "0.22.4"}
   "js_of_ocaml"
   "js_of_ocaml-compiler"
   "js_of_ocaml-lwt"
