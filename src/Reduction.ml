@@ -14,7 +14,7 @@ module CNF = struct
   type 'v clause = 'v literal list
   type 'v t = 'v clause list
   type 'v solution = 'v literal list
-  type 'v solver = 'v t -> 'v solution option
+  type 'v solver = equal:('v -> 'v -> bool) -> 'v t -> 'v solution option
 
   let lit v c = Lit (Var (v, c))
   let nlit v c = NLit (Var (v, c))
@@ -83,4 +83,4 @@ let recover_answer ~(equal : 'v -> 'v -> bool) (g : 'v Graph.t)
 
 let solve ~(equal : 'v -> 'v -> bool) (sat_sol : 'v CNF.solver) (g : 'v Graph.t)
     : Color.coloring option =
-  recover_answer g ~equal (sat_sol (generate_cnf g))
+  recover_answer g ~equal (sat_sol ~equal (generate_cnf g))
