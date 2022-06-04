@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>3 Coloring problem</title>
+        <meta charset="utf-8">
+        <link rel="shortcut icon" href="/resource/images/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="/styles/main.css">
+        <link rel="stylesheet" href="/styles/style.css">
+        <script src="https://d3js.org/d3.v3.js"></script>
+        <script src="/scripts/jsnetworkx.js"></script>
+
+        <script defer src="/scripts/main.js"></script>
+        <script defer src="/scripts/textareaUpgrade.js"></script>
+        <script defer src="/scripts/graph.js"></script>
+        <script defer src="/scripts/parseInput.js"></script>
+        <script defer src="/scripts/index.js"></script>
+        
+    </head>
+
+    <body>
+        <div class="input-request">
+            <div class="line-numeration">
+                <div class="line-number">1</div>
+            </div>
+            <textarea class="input-data-textarea" placeholder="Input" spellcheck="false" wrap="off"></textarea>
+            <div class="popup">
+                <img class="popup-icon" src="/resource/images/info.png">
+                <div class="popup-menu">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+            </div>
+        </div>
+        <div class="options-wraper">
+            <div class="sidebar"></div>
+            <button class="solve-button" disabled>
+                <span>solve</span>
+            </button>
+        </div>
+        <div class="input-response">
+            <div class="sidebar"></div>
+            <textarea class="response-textarea" spellcheck="false" readonly></textarea>
+        </div>
+
+        <div class="graph-wraper"></div>
+
+        <footer>
+            <a href="https://www.monsterenergy.com/">Powered by Monster Energy Drink</a>
+        </footer>
+    </body>
+</html>

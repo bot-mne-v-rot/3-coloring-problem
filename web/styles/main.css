@@ -1,0 +1,54 @@
+﻿@font-face {
+    font-family: consolas;
+    src: url(/resource/fonts/consolas.ttf);
+}
+
+@font-face {
+    font-family: Mukta;
+    font-weight: 200;
+    src: url(/resource/fonts/Mukta-ExtraLight.ttf);
+}
+
+:root {
+    --light-blue: #0F242F;
+    --blue: #111D23;
+    --dark-blue: #05161F;
+}
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: grid;
+    grid-template-rows: 55% 60px 1fr;
+    grid-template-columns: 400px 1fr;
+    width: 100vw;
+    height: 100vh;
+
+    font-family: consolas;
+}
+
+footer {
+    grid-row: 4 / 5;
+    grid-column: 2 / 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 24px;
+    padding-right: 6px;
+
+    background-color: #091217;
+}
+
+footer a {
+    font-size: 14px;
+    text-decoration: none;
+    color: #FFFFFFA8;
+}
+
+footer a:hover {
+    text-decoration: underline;
+    color: #FFFFFFD0;
+}
