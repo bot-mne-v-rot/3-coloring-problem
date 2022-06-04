@@ -1,0 +1,124 @@
+{
+    "alias_barrier_modules": [
+        "Src__Environment"
+    ],
+    "constructor_map": [
+        [
+            "public_key_hash",
+            "Ed25519",
+            "Ed25519Hash"
+        ],
+        [
+            "public_key_hash",
+            "P256",
+            "P256Hash"
+        ],
+        [
+            "public_key_hash",
+            "Secp256k1",
+            "Secp256k1Hash"
+        ]
+    ],
+    "error_category_blacklist": [
+        "extensible_type",
+        "side_effect"
+    ],
+    "error_message_blacklist": [
+        "Polymorphic variant types are defined as standard algebraic types",
+        "Sub-modules in included signatures are not handled well yet.",
+        "No type known for the following variants: `Variable, `Fixed, `Dynamic",
+        "No type known for the following variants: `Uint16, `Uint8, `Uint30",
+        "No type known for the following variants: `OkStream, `Unauthorized, `OkChunk, `Error, `Ok, `Not_found, `Forbidden, `Created, `Conflict, `No_content",
+        "Can only do `with` on types in module types using type expressions rather than type definitions"
+    ],
+    "escape_value": [
+        "a",
+        "alloc",
+        "array",
+        "b",
+        "baking_rights_query",
+        "case",
+        "config",
+        "cons",
+        "descr",
+        "diff",
+        "elt",
+        "endorsing_rights_query",
+        "eq",
+        "error",
+        "field",
+        "fixed",
+        "fp",
+        "frozen_balance",
+        "handler",
+        "has_lazy_storage",
+        "hash",
+        "info",
+        "init",
+        "integral",
+        "internal_gas",
+        "json",
+        "json_schema",
+        "judgement",
+        "key",
+        "kind",
+        "lazy_expr",
+        "level_query",
+        "list_query",
+        "namespace",
+        "nonce",
+        "query",
+        "p",
+        "parametric",
+        "r",
+        "raw",
+        "root",
+        "seed",
+        "sequence",
+        "size",
+        "snapshot",
+        "stack",
+        "storage",
+        "storage_error",
+        "t",
+        "tc_context",
+        "trace",
+        "type_logger",
+        "value",
+        "void"
+    ],
+    "first_class_module_signature_blacklist": [
+        "Stdlib.Map.OrderedType",
+        "Stdlib.MoreLabels.Map.OrderedType",
+        "Stdlib.MoreLabels.Set.OrderedType",
+        "Stdlib.Set.OrderedType"
+    ],
+    "renaming_rules": [
+        [
+            "tag_size",
+            "Variant.t"
+        ],
+        [
+            "Lwt.t",
+            ""
+        ],
+        [
+            "Ok",
+            "Ok"
+        ],
+        [
+            "Error",
+            "Error"
+        ]
+    ],
+    "variant_types": [
+        [
+            "Dir",
+            "Context.key_or_dir"
+        ],
+        [
+            "Key",
+            "Context.key_or_dir"
+        ]
+    ]
+}

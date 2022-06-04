@@ -5,5 +5,6 @@
 -R _build/default/src Src
 -R _build/default/theories Theories
 
-_build/default/src/Tree.v
-_build/default/theories/TreeSpec.v
+_build/default/src/Environment.v
+_build/default/src/Reduction.v
+_build/default/theories/ReductionSpec.v

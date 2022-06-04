@@ -1,17 +1,23 @@
 (library
- (name reduction)
+ (name src)
  (modes byte native)
  (wrapped true)
- (libraries base)
+ (modules_without_implementation environment)
  (preprocess
   (pps ppx_let ppx_compare ppx_sexp_conv ppx_string_interpolation sedlex.ppx)))
 
+; (rule
+;  (target Reduction.ml.patched)
+;  (deps Reduction.ml)
+;  (action
+;   (run ./patch-sources.sh %{target})))
+
 (rule
- (targets Tree.v)
- (deps Tree.ml)
+ (target Reduction.v)
+ (deps Reduction.ml)
  (mode promote)
  (action
-  (run %{bin:coq-of-ocaml} %{deps})))
+  (run %{bin:coq-of-ocaml} -config %{dep:config.json} %{deps})))
 
 (coq.theory
  (name Src)
