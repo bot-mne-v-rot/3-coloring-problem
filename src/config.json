@@ -483,13 +483,14 @@
             "Context.key_or_dir"
         ]
     ],
-    "require_import": [
+    "require": [
         [
             "Src",
             "Src"
+        ],
+        [
+            "Stdlib",
+            "Src"
         ]
-    ],
-    "require_mli": [
-        "Environment"
     ]
 }

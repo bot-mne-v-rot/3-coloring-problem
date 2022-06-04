@@ -1,5 +1,3 @@
-open Environment
-
 module Graph = struct
   type 'v edge = 'v * 'v
   type 'v t = { vertices : 'v list; edges : 'v edge list }
@@ -38,39 +36,51 @@ let vertices_color_uniqueness (g : 'v Graph.t) : 'v CNF.t =
     let diff_cols c1 c2 = [ nlit v c1; nlit v c2 ] in
     [ diff_cols R B; diff_cols B G; diff_cols R G ]
   in
-  List.flatten @@ List.map f Graph.(g.vertices)
+  List.flatten (List.map f Graph.(g.vertices))
 
 (* Clauses for condition: adjacent vertices have different colors *)
 let adj_vertices_have_diff_colors (g : 'v Graph.t) : 'v CNF.t =
   let open CNF in
   let open Color in
-  let f (e : 'v Graph.edge) =
-    let u = fst e in
-    let v = snd e in
+  let f ((u, v) : 'v Graph.edge) =
     let diff_cols c1 c2 = [ nlit u c1; nlit v c2 ] in
     [ diff_cols R G; diff_cols B G; diff_cols R B ]
   in
-  List.flatten @@ List.map f Graph.(g.edges)
+  List.flatten (List.map f Graph.(g.edges))
+
+let ( @ ) = List.append
 
 let generate_cnf (g : 'v Graph.t) : 'v CNF.t =
-  vertex_has_color g
-  @ vertices_color_uniqueness g
+  (vertex_has_color g @ vertices_color_uniqueness g)
   @ adj_vertices_have_diff_colors g
+
+module List = struct
+  include List
+
+  let map_opt (f : 'a -> 'b option) (l : 'a list) : 'b list option =
+    let h e xs = Option.map (fun x -> cons x xs) (f e) in
+    let g r e = Option.bind r (h e) in
+    List.fold_left g (Some []) l
+end
 
 let recover_answer ~(equal : 'v -> 'v -> bool) (g : 'v Graph.t)
     (sol : 'v CNF.solution option) : Color.coloring option =
   let get_coloring (sol : 'v CNF.solution) =
-    let f (v : 'v) =
-      let true_var = function
+    let f (v : 'v) : Color.t option =
+      let true_var : 'v CNF.literal -> Color.t option = function
         | CNF.Lit (CNF.Var (v', c)) -> if equal v v' then Some c else None
         | _ -> None
       in
-      Option.to_result ~none:() @@ List.find_map true_var sol
+      List.find_map true_var sol
     in
-    Option.of_result @@ List.map_e f Graph.(g.vertices)
+    let map_opt : ('v -> Color.t option) -> 'v list -> Color.t list option =
+      (List.map_opt [@coq_type_annotation])
+    in
+    (map_opt [@coq_type_annotation]) (f [@coq_type_annotation])
+      (Graph.(g.vertices) [@coq_type_annotation])
   in
   Option.bind sol get_coloring
 
 let solve ~(equal : 'v -> 'v -> bool) (sat_sol : 'v CNF.solver) (g : 'v Graph.t)
     : Color.coloring option =
-  recover_answer g ~equal @@ sat_sol @@ generate_cnf g
+  recover_answer g ~equal (sat_sol (generate_cnf g))

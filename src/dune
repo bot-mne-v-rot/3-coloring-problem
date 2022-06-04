@@ -2,7 +2,6 @@
  (name src)
  (modes byte native)
  (wrapped true)
- (modules_without_implementation environment)
  (preprocess
   (pps ppx_let ppx_compare ppx_sexp_conv ppx_string_interpolation sedlex.ppx)))
 
@@ -11,6 +10,20 @@
 ;  (deps Reduction.ml)
 ;  (action
 ;   (run ./patch-sources.sh %{target})))
+
+(rule
+ (target List.v)
+ (deps list.ml)
+ (mode promote)
+ (action
+  (run %{bin:coq-of-ocaml} -config %{dep:config-environment.json} %{deps})))
+
+(rule
+ (target Option.v)
+ (deps option.ml)
+ (mode promote)
+ (action
+  (run %{bin:coq-of-ocaml} -config %{dep:config-environment.json} %{deps})))
 
 (rule
  (target Reduction.v)

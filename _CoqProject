@@ -2,6 +2,7 @@
 # to see interface files
 
 -arg -impredicative-set
+-arg -notation-overridden,-unexpected-implicit-declaration
 -R _build/default/src Src
 -R _build/default/theories Theories
 

@@ -2,8 +2,8 @@
 Require Import CoqOfOCaml.CoqOfOCaml.
 Require Import CoqOfOCaml.Settings.
 
-Require Src.Environment_mli. Module Environment := Environment_mli.
-Import Environment.
+Require Src.List.
+Require Src.Option.
 
 Module Graph.
   Definition edge (v : Set) : Set := v * v.
@@ -79,9 +79,9 @@ Definition vertices_color_uniqueness {v : Set} (g_value : Graph.t v)
 
 Definition adj_vertices_have_diff_colors {v : Set} (g_value : Graph.t v)
   : CNF.t v :=
-  let f_value (e_value : Graph.edge v) : list (list (CNF.literal v)) :=
-    let u_value := fst e_value in
-    let v_value := snd e_value in
+  let f_value (function_parameter : Graph.edge v)
+    : list (list (CNF.literal v)) :=
+    let '(u_value, v_value) := function_parameter in
     let diff_cols (c1 : Color.t) (c2 : Color.t) : list (CNF.literal v) :=
       [ CNF.nlit u_value c1; CNF.nlit v_value c2 ] in
     [
@@ -91,16 +91,31 @@ Definition adj_vertices_have_diff_colors {v : Set} (g_value : Graph.t v)
     ] in
   List.flatten (List.map f_value g_value.(Graph.t.edges)).
 
+Definition op_at {A : Set} : list A -> list A -> list A := List.append.
+
 Definition generate_cnf {v : Set} (g_value : Graph.t v) : CNF.t v :=
-  CoqOfOCaml.Stdlib.app (vertex_has_color g_value)
-    (CoqOfOCaml.Stdlib.app (vertices_color_uniqueness g_value)
-      (adj_vertices_have_diff_colors g_value)).
+  op_at (op_at (vertex_has_color g_value) (vertices_color_uniqueness g_value))
+    (adj_vertices_have_diff_colors g_value).
+
+Module List.
+  Include List.
+  
+  Definition map_opt {a b : Set} (f_value : a -> option b) (l_value : list a)
+    : option (list b) :=
+    let h_value (e_value : a) (xs : list b) : Option.t (list b) :=
+      Option.map (fun (x_value : b) => cons_value x_value xs) (f_value e_value)
+      in
+    let g_value (r_value : Option.t (list b)) (e_value : a)
+      : Option.t (list b) :=
+      Option.bind r_value (h_value e_value) in
+    List.fold_left g_value (Some nil) l_value.
+End List.
 
 Definition recover_answer {v : Set}
   (equal : v -> v -> bool) (g_value : Graph.t v) (sol : option (CNF.solution v))
   : option Color.coloring :=
   let get_coloring (sol : CNF.solution v) : option (list Color.t) :=
-    let f_value (v_value : v) : Pervasives.result Color.t unit :=
+    let f_value (v_value : v) : option Color.t :=
       let true_var (function_parameter : CNF.literal v) : option Color.t :=
         match function_parameter with
         | CNF.Lit (CNF.Var v' c_value) =>
@@ -110,8 +125,12 @@ Definition recover_answer {v : Set}
             None
         | _ => None
         end in
-      Option.to_result tt (List.find_map true_var sol) in
-    Option.of_result (List.map_e f_value g_value.(Graph.t.vertices)) in
+      List.find_map true_var sol in
+    let map_opt :=
+      (List.map_opt : (v -> option Color.t) -> list v -> option (list Color.t))
+      in
+    (map_opt : (v -> option Color.t) -> list v -> option (list Color.t))
+      (f_value : v -> option Color.t) (g_value.(Graph.t.vertices) : list v) in
   Option.bind sol get_coloring.
 
 Definition solve {v : Set}
