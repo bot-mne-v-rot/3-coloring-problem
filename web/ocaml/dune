@@ -1,5 +1,5 @@
 (executable
- (name solver)
+ (name export)
  (promote)
  (modes js)
  (libraries src)
