@@ -1,6 +1,5 @@
 _opam/
 _build/
-.vs-code/
 
 # Coq
 *.vok
@@ -9,8 +8,12 @@ _build/
 *.glob
 *.aux
 
+# js-of-ocaml
+*.bc*
+
 Makefile.coq 
 Makefile.coq.conf
 .Makefile.coq.d
 
+.vs-code/
 *.code-workspace

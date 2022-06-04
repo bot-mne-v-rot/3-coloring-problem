@@ -5,12 +5,6 @@
  (preprocess
   (pps ppx_let ppx_compare ppx_sexp_conv ppx_string_interpolation sedlex.ppx)))
 
-; (rule
-;  (target Reduction.ml.patched)
-;  (deps Reduction.ml)
-;  (action
-;   (run ./patch-sources.sh %{target})))
-
 (rule
  (target List.v)
  (deps list.ml)
