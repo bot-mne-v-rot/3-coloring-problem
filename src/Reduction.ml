@@ -20,7 +20,7 @@ module CNF = struct
   let nlit v c = NLit (Var (v, c))
 end
 
-(* Clauses for condition: each vertex has at least one color *)
+(* Clauses for condition: each vertex is assigned at least one color *)
 let vertex_has_color (g : 'v Graph.t) : 'v CNF.t =
   let f v =
     let lit c = CNF.(Lit (Var (v, c))) in

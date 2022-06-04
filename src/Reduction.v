@@ -49,7 +49,8 @@ Module CNF.
   
   Definition solution (v : Set) : Set := list (literal v).
   
-  Definition solver (v : Set) : Set := t v -> option (solution v).
+  Definition solver (v : Set) : Set :=
+    (v -> v -> bool) -> t v -> option (solution v).
   
   Definition lit {A : Set} (v_value : A) (c_value : Color.t) : literal A :=
     Lit (Var v_value c_value).
@@ -136,4 +137,4 @@ Definition recover_answer {v : Set}
 Definition solve {v : Set}
   (equal : v -> v -> bool) (sat_sol : CNF.solver v) (g_value : Graph.t v)
   : option Color.coloring :=
-  recover_answer equal g_value (sat_sol (generate_cnf g_value)).
+  recover_answer equal g_value (sat_sol equal (generate_cnf g_value)).
