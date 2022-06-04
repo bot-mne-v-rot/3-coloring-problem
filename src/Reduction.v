@@ -2,4 +2,119 @@
 Require Import CoqOfOCaml.CoqOfOCaml.
 Require Import CoqOfOCaml.Settings.
 
-Definition x_value {A : Set} : option A -> A -> A := Stdlib.Option.value_value.
+Require Src.Environment_mli. Module Environment := Environment_mli.
+Import Environment.
+
+Module Graph.
+  Definition edge (v : Set) : Set := v * v.
+  
+  Module t.
+    Record record {v : Set} : Set := Build {
+      vertices : list v;
+      edges : list (edge v) }.
+    Arguments record : clear implicits.
+    Definition with_vertices {t_v} vertices (r : record t_v) :=
+      Build t_v vertices r.(edges).
+    Definition with_edges {t_v} edges (r : record t_v) :=
+      Build t_v r.(vertices) edges.
+  End t.
+  Definition t := t.record.
+End Graph.
+
+Module Color.
+  Inductive t : Set :=
+  | R : t
+  | G : t
+  | B : t.
+  
+  Definition coloring : Set := list t.
+End Color.
+
+Module CNF.
+  Inductive var (v : Set) : Set :=
+  | Var : v -> Color.t -> var v.
+  
+  Arguments Var {_}.
+  
+  Inductive literal (v : Set) : Set :=
+  | Lit : var v -> literal v
+  | NLit : var v -> literal v.
+  
+  Arguments Lit {_}.
+  Arguments NLit {_}.
+  
+  Definition clause (v : Set) : Set := list (literal v).
+  
+  Definition t (v : Set) : Set := list (clause v).
+  
+  Definition solution (v : Set) : Set := list (literal v).
+  
+  Definition solver (v : Set) : Set := t v -> option (solution v).
+  
+  Definition lit {A : Set} (v_value : A) (c_value : Color.t) : literal A :=
+    Lit (Var v_value c_value).
+  
+  Definition nlit {A : Set} (v_value : A) (c_value : Color.t) : literal A :=
+    NLit (Var v_value c_value).
+End CNF.
+
+Definition vertex_has_color {v : Set} (g_value : Graph.t v) : CNF.t v :=
+  let f_value {B : Set} (v_value : B) : list (CNF.literal B) :=
+    let lit (c_value : Color.t) : CNF.literal B :=
+      CNF.Lit (CNF.Var v_value c_value) in
+    [ lit Color.R; lit Color.G; lit Color.B ] in
+  List.map f_value g_value.(Graph.t.vertices).
+
+Definition vertices_color_uniqueness {v : Set} (g_value : Graph.t v)
+  : CNF.t v :=
+  let f_value (v_value : v) : list (list (CNF.literal v)) :=
+    let diff_cols (c1 : Color.t) (c2 : Color.t) : list (CNF.literal v) :=
+      [ CNF.nlit v_value c1; CNF.nlit v_value c2 ] in
+    [
+      diff_cols Color.R Color.B;
+      diff_cols Color.B Color.G;
+      diff_cols Color.R Color.G
+    ] in
+  List.flatten (List.map f_value g_value.(Graph.t.vertices)).
+
+Definition adj_vertices_have_diff_colors {v : Set} (g_value : Graph.t v)
+  : CNF.t v :=
+  let f_value (e_value : Graph.edge v) : list (list (CNF.literal v)) :=
+    let u_value := fst e_value in
+    let v_value := snd e_value in
+    let diff_cols (c1 : Color.t) (c2 : Color.t) : list (CNF.literal v) :=
+      [ CNF.nlit u_value c1; CNF.nlit v_value c2 ] in
+    [
+      diff_cols Color.R Color.G;
+      diff_cols Color.B Color.G;
+      diff_cols Color.R Color.B
+    ] in
+  List.flatten (List.map f_value g_value.(Graph.t.edges)).
+
+Definition generate_cnf {v : Set} (g_value : Graph.t v) : CNF.t v :=
+  CoqOfOCaml.Stdlib.app (vertex_has_color g_value)
+    (CoqOfOCaml.Stdlib.app (vertices_color_uniqueness g_value)
+      (adj_vertices_have_diff_colors g_value)).
+
+Definition recover_answer {v : Set}
+  (equal : v -> v -> bool) (g_value : Graph.t v) (sol : option (CNF.solution v))
+  : option Color.coloring :=
+  let get_coloring (sol : CNF.solution v) : option (list Color.t) :=
+    let f_value (v_value : v) : Pervasives.result Color.t unit :=
+      let true_var (function_parameter : CNF.literal v) : option Color.t :=
+        match function_parameter with
+        | CNF.Lit (CNF.Var v' c_value) =>
+          if equal v_value v' then
+            Some c_value
+          else
+            None
+        | _ => None
+        end in
+      Option.to_result tt (List.find_map true_var sol) in
+    Option.of_result (List.map_e f_value g_value.(Graph.t.vertices)) in
+  Option.bind sol get_coloring.
+
+Definition solve {v : Set}
+  (equal : v -> v -> bool) (sat_sol : CNF.solver v) (g_value : Graph.t v)
+  : option Color.coloring :=
+  recover_answer equal g_value (sat_sol (generate_cnf g_value)).
