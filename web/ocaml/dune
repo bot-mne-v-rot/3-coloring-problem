@@ -1,0 +1,7 @@
+(executable
+ (name solver)
+ (promote)
+ (modes js)
+ (libraries src)
+ (preprocess
+  (pps js_of_ocaml-ppx)))
