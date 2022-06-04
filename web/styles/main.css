@@ -1,12 +1,12 @@
 ﻿@font-face {
     font-family: consolas;
-    src: url(/resource/fonts/consolas.ttf);
+    src: url(./resource/fonts/consolas.ttf);
 }
 
 @font-face {
     font-family: Mukta;
     font-weight: 200;
-    src: url(/resource/fonts/Mukta-ExtraLight.ttf);
+    src: url(./resource/fonts/Mukta-ExtraLight.ttf);
 }
 
 :root {
