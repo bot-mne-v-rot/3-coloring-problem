@@ -175,6 +175,10 @@ textarea:focus-visible {
     background-color: #0b1216;
 }
 
+svg g circle {
+    cursor: pointer;
+}
+
 svg g text {
     fill: #FFFFFF !important;
     
